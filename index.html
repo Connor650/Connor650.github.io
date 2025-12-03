@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entertainment Hub & Connor Sullivan Profile</title>
+    <title>Entertainment Hub & Arcade</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Custom styles for aesthetic appeal */
+        body {
+            background-color: #f3f4f6; /* Light gray background */
+        }
         .card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
         }
         .card:hover {
             transform: translateY(-5px);
@@ -21,129 +26,849 @@
             object-fit: cover;
             border-radius: 0.75rem; /* rounded-xl in Tailwind */
         }
+        /* Sidebar link styles */
+        .sidebar-link {
+            transition: all 0.2s ease;
+        }
+        .sidebar-link:hover {
+            padding-left: 0.5rem;
+            background-color: rgba(255,255,255,0.2);
+        }
+        /* Clicker animation */
+        .click-anim:active {
+            transform: scale(0.95);
+        }
+
+        /* --- GAME STYLES --- */
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            background-color: #000;
+        }
+        .game-wrapper {
+            position: relative;
+            background-color: #1a1a1a;
+            padding: 8px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #333;
+            transition: border-color 0.2s;
+            outline: none; /* Remove default focus outline */
+        }
+        /* Focus state to show which game is active */
+        .game-wrapper:focus {
+            border-color: #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        .game-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.75);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 10;
+            pointer-events: none; /* Let clicks pass through to wrapper focus */
+            transition: opacity 0.2s;
+        }
+        .game-wrapper:focus .game-overlay {
+            opacity: 0;
+        }
+        /* Instructions Text */
+        .game-info {
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            color: #ddd;
+            font-size: 0.75rem;
+            margin-top: 5px;
+        }
+        .game-title {
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            text-shadow: 0 0 5px currentColor;
+        }
     </style>
 </head>
-<body class="bg-gray-50 font-sans antialiased p-4 md:p-8">
+<body class="font-sans antialiased p-4 md:p-8 text-gray-800">
 
-    <div class="max-w-6xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden p-6 md:p-10">
+    <div class="max-w-[95rem] mx-auto">
 
         <!-- Header Section -->
-        <header class="text-center mb-12">
-            <h1 class="text-5xl font-extrabold text-blue-800 tracking-tight mb-2">
-                Digital Streaming Hub
+        <header class="text-center mb-10 bg-gradient-to-r from-blue-800 to-indigo-900 text-white p-8 rounded-2xl shadow-xl">
+            <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight mb-2">
+                Digital Command Center
             </h1>
-            <p class="text-lg text-gray-500 italic">Quick Links & Featured Athlete</p>
+            <p class="text-lg text-blue-100 italic">Streaming, Athletics, News & Arcade</p>
         </header>
 
-        <!-- Streaming Links Section -->
-        <section class="mb-16">
-            <h2 class="text-3xl font-bold text-gray-700 border-b-2 border-indigo-400 pb-3 mb-6">
-                Streaming Services
-            </h2>
+        <!-- Main Grid Layout: 3 Parts Content, 1 Part Sidebar -->
+        <div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
 
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+            <!-- LEFT COLUMN: Main Content -->
+            <div class="xl:col-span-3 space-y-12">
 
-                <!-- Link 1: YouTube TV -->
-                <a href="https://tv.youtube.com/" target="_blank" class="media-link block card group hover:ring-4 hover:ring-red-400 rounded-xl">
-                    <img src="https://placehold.co/400x225/FF0000/FFFFFF?text=YouTube+TV"
-                         alt="YouTube TV Logo Placeholder"
-                         title="Go to YouTube TV"
-                         class="rounded-xl border-4 border-red-500 group-hover:border-red-600">
-                    <p class="text-center mt-2 text-sm font-semibold text-red-600 group-hover:text-red-800">YouTube TV</p>
-                </a>
+                <!-- Streaming Links Section -->
+                <section class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h2 class="text-3xl font-bold text-gray-700 border-b-2 border-indigo-400 pb-3 mb-6">
+                        Streaming Services
+                    </h2>
 
-                <!-- Link 2: Prime Video -->
-                <a href="https://www.amazon.com/Prime-Video/" target="_blank" class="media-link block card group hover:ring-4 hover:ring-blue-400 rounded-xl">
-                    <img src="https://placehold.co/400x225/00A8E1/FFFFFF?text=Prime+Video"
-                         alt="Prime Video Logo Placeholder"
-                         title="Go to Prime Video"
-                         class="rounded-xl border-4 border-blue-500 group-hover:border-blue-600">
-                    <p class="text-center mt-2 text-sm font-semibold text-blue-600 group-hover:text-blue-800">Prime Video</p>
-                </a>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <!-- YouTube TV -->
+                        <a href="https://tv.youtube.com/" target="_blank" class="media-link block card group hover:ring-4 hover:ring-red-500 rounded-xl">
+                            <img src="https://placehold.co/400x225/FF0000/FFFFFF?text=YouTube+TV" alt="YouTube TV" class="rounded-xl border-4 border-red-500 group-hover:border-red-600">
+                        </a>
+                        <!-- Prime Video -->
+                        <a href="https://www.amazon.com/Prime-Video/" target="_blank" class="media-link block card group hover:ring-4 hover:ring-blue-500 rounded-xl">
+                            <img src="https://placehold.co/400x225/00A8E1/FFFFFF?text=Prime+Video" alt="Prime Video" class="rounded-xl border-4 border-blue-500 group-hover:border-blue-600">
+                        </a>
+                        <!-- Netflix -->
+                        <a href="https://www.netflix.com/" target="_blank" class="media-link block card group hover:ring-4 hover:ring-red-700 rounded-xl">
+                            <img src="https://placehold.co/400x225/E50914/FFFFFF?text=Netflix" alt="Netflix" class="rounded-xl border-4 border-gray-900 group-hover:border-black">
+                        </a>
+                        <!-- YouTube -->
+                        <a href="https://www.youtube.com/" target="_blank" class="media-link block card group hover:ring-4 hover:ring-red-600 rounded-xl">
+                            <img src="https://placehold.co/400x225/FF0000/FFFFFF?text=YouTube" alt="YouTube" class="rounded-xl border-4 border-red-600 group-hover:border-red-700">
+                        </a>
+                        <!-- Disney Plus -->
+                        <a href="https://www.disneyplus.com/" target="_blank" class="media-link block card group hover:ring-4 hover:ring-blue-700 rounded-xl">
+                            <img src="https://placehold.co/400x225/0063E5/FFFFFF?text=Disney+" alt="Disney Plus" class="rounded-xl border-4 border-blue-700 group-hover:border-blue-800">
+                        </a>
+                        <!-- HBO Max -->
+                        <a href="https://www.max.com/" target="_blank" class="media-link block card group hover:ring-4 hover:ring-purple-700 rounded-xl">
+                            <img src="https://placehold.co/400x225/5E20A1/FFFFFF?text=HBO+Max" alt="HBO Max" class="rounded-xl border-4 border-purple-700 group-hover:border-purple-800">
+                        </a>
+                        <!-- Spotify -->
+                        <a href="https://open.spotify.com/" target="_blank" class="media-link block card group hover:ring-4 hover:ring-green-500 rounded-xl">
+                            <img src="https://placehold.co/400x225/1DB954/FFFFFF?text=Spotify" alt="Spotify" class="rounded-xl border-4 border-green-500 group-hover:border-green-600">
+                        </a>
+                        <!-- Hulu -->
+                        <a href="https://www.hulu.com/" target="_blank" class="media-link block card group hover:ring-4 hover:ring-green-300 rounded-xl">
+                            <img src="https://placehold.co/400x225/1CE783/FFFFFF?text=Hulu" alt="Hulu" class="rounded-xl border-4 border-green-400 group-hover:border-green-500">
+                        </a>
+                    </div>
+                </section>
 
-                <!-- Link 3: Netflix -->
-                <a href="https://www.netflix.com/" target="_blank" class="media-link block card group hover:ring-4 hover:ring-gray-800 rounded-xl">
-                    <img src="https://placehold.co/400x225/E50914/FFFFFF?text=Netflix"
-                         alt="Netflix Logo Placeholder"
-                         title="Go to Netflix"
-                         class="rounded-xl border-4 border-gray-900 group-hover:border-black">
-                    <p class="text-center mt-2 text-sm font-semibold text-gray-900 group-hover:text-black">Netflix</p>
-                </a>
+                <!-- ARCADE ZONE (Moved to Top) -->
+                <section id="arcade-zone" class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h2 class="text-3xl font-bold text-purple-600 mb-6 flex items-center">
+                        <span class="mr-2">🕹️</span> Arcade Zone
+                    </h2>
+
+                    <!-- Horizontal Grid Layout (Left to Right) -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                        <!-- GAME 1: SNAKE -->
+                        <div class="game-wrapper" tabindex="0" id="snake-game">
+                            <div class="game-title text-green-400">NEON SNAKE</div>
+                            <canvas id="snakeCanvas" width="280" height="280"></canvas>
+                            <div class="game-info">Click to Focus<br>Press <strong>'F'</strong> to Start</div>
+
+                            <!-- Overlay -->
+                            <div class="game-overlay">
+                                <div class="text-2xl mb-2">🐍</div>
+                                <div class="font-bold">CLICK ME</div>
+                                <div class="text-sm">Then press 'F'</div>
+                            </div>
+                        </div>
+
+                        <!-- GAME 2: DINO -->
+                        <div class="game-wrapper" tabindex="0" id="dino-game">
+                            <div class="game-title text-gray-400">DINO RUN</div>
+                            <canvas id="dinoCanvas" width="280" height="280" style="background-color: #f7f7f7;"></canvas>
+                            <div class="game-info">Click to Focus<br>Press <strong>'F'</strong> to Start</div>
+
+                            <!-- Overlay -->
+                            <div class="game-overlay">
+                                <div class="text-2xl mb-2">🦖</div>
+                                <div class="font-bold">CLICK ME</div>
+                                <div class="text-sm">Then press 'F'</div>
+                            </div>
+                        </div>
+
+                        <!-- GAME 3: BREAKOUT -->
+                        <div class="game-wrapper" tabindex="0" id="breakout-game">
+                            <div class="game-title text-cyan-400">BREAKOUT</div>
+                            <canvas id="breakoutCanvas" width="280" height="280"></canvas>
+                            <div class="game-info">Click to Focus<br>Press <strong>'F'</strong> to Start</div>
+
+                            <!-- Overlay -->
+                            <div class="game-overlay">
+                                <div class="text-2xl mb-2">🧱</div>
+                                <div class="font-bold">CLICK ME</div>
+                                <div class="text-sm">Then press 'F'</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- SPORTS CENTRAL (Moved Below Arcade) -->
+                <section class="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-orange-500">
+                    <h2 class="text-3xl font-bold text-orange-600 mb-6 flex items-center">
+                        <span class="mr-2">🏆</span> Sports Central
+                    </h2>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                        <a href="https://www.espn.com/nfl/standings" target="_blank" class="block p-4 rounded-xl bg-gradient-to-br from-blue-900 to-blue-700 text-white text-center font-bold hover:scale-105 transition shadow-lg card">
+                            🏈 NFL
+                        </a>
+                        <a href="https://www.espn.com/mlb/standings" target="_blank" class="block p-4 rounded-xl bg-gradient-to-br from-red-800 to-red-600 text-white text-center font-bold hover:scale-105 transition shadow-lg card">
+                            ⚾ MLB
+                        </a>
+                        <a href="https://www.espn.com/nba/standings" target="_blank" class="block p-4 rounded-xl bg-gradient-to-br from-orange-600 to-orange-500 text-white text-center font-bold hover:scale-105 transition shadow-lg card">
+                            🏀 NBA
+                        </a>
+                        <a href="https://www.espn.com/nhl/standings" target="_blank" class="block p-4 rounded-xl bg-gradient-to-br from-gray-800 to-gray-600 text-white text-center font-bold hover:scale-105 transition shadow-lg card">
+                            🏒 NHL
+                        </a>
+                        <a href="https://www.espn.com/soccer/standings/_/league/usa.1" target="_blank" class="block p-4 rounded-xl bg-gradient-to-br from-green-700 to-green-500 text-white text-center font-bold hover:scale-105 transition shadow-lg card">
+                            ⚽ MLS
+                        </a>
+                    </div>
+                </section>
+
+                <!-- Featured Artist: NBA YoungBoy (Moved Below Sports) -->
+                <section class="bg-gray-900 text-white p-6 md:p-8 rounded-2xl shadow-2xl border-l-8 border-green-500">
+                    <h2 class="text-3xl font-bold text-green-400 mb-4 flex items-center">
+                        Featured Artist: NBA YoungBoy
+                    </h2>
+                    <div class="grid md:grid-cols-3 gap-6 items-start">
+                        <div class="md:col-span-2 space-y-4 text-gray-300">
+                            <p><strong>Kentrell DeSean Gaulden</strong> (NBA YoungBoy) is a prolific Baton Rouge rapper known for charting over 100 singles on Billboard and having three #1 albums in a single year.</p>
+                            <a href="https://open.spotify.com/artist/7wlFDEWiM5OoIHgZgqdHRs" target="_blank" class="inline-flex items-center px-6 py-2 rounded-full bg-green-500 hover:bg-green-600 text-black font-bold transition">
+                                Listen on Spotify
+                            </a>
+                        </div>
+                        <div class="md:col-span-1 flex justify-center">
+                            <img src="https://placehold.co/250x300/4B5563/FFFFFF?text=NBA+YoungBoy" alt="NBA YoungBoy" class="rounded-xl shadow-lg border-2 border-green-500">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Featured Athlete: Connor Sullivan (Moved Below YoungBoy) -->
+                <section class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border-l-8 border-indigo-600">
+                    <h2 class="text-3xl font-bold text-indigo-800 mb-4">Featured Athlete: Connor Sullivan</h2>
+                    <p class="mb-4 text-gray-700">From <strong>Los Gatos High School</strong> to <strong>Pomona College Water Polo</strong>. A standout SCVAL League MVP and Academic All-American known for his ambidextrous play.</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse rounded-lg overflow-hidden shadow-sm">
+                            <thead class="bg-indigo-600 text-white">
+                                <tr>
+                                    <th class="p-3">Category</th>
+                                    <th class="p-3">Detail</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-gray-50 border-b"><td class="p-3 font-semibold">High School</td><td class="p-3">Los Gatos High School</td></tr>
+                                <tr class="bg-gray-50 border-b"><td class="p-3 font-semibold">College</td><td class="p-3">Pomona College</td></tr>
+                                <tr class="bg-gray-50"><td class="p-3 font-semibold">Sport</td><td class="p-3">Water Polo (Driver/Utility)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Special Thanks Footer -->
+                <section class="mt-8 bg-gradient-to-r from-blue-900 to-indigo-900 text-white p-8 rounded-2xl text-center shadow-2xl">
+                    <h2 class="text-3xl font-bold mb-4">✨ Special Thanks ✨<br> to the makers of this website </h2>
+                    <div class="flex justify-center items-center space-x-8 text-xl">
+                        <div class="flex items-center">
+                            <span class="text-4xl mr-3">🤖</span>
+                            <div>
+                                <div class="font-bold text-blue-300">Google Gemini</div>
+                                <div class="text-sm opacity-75">AI Architect</div>
+                            </div>
+                        </div>
+                        <div class="h-12 w-px bg-blue-500/50"></div>
+                        <div class="flex items-center">
+                            <span class="text-4xl mr-3">️</span>
+                            <div>
+                                <div class="font-bold text-indigo-300">Connor Sullivan</div>
+                                <div class="text-sm opacity-75">Creative Vision</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
             </div>
 
-            <!-- Note: Per instructions, I've used placeholder images (as absolute URLs are discouraged and you don't have access to external image files). -->
-        </section>
-
-        <!-- Athlete Profile Section -->
-        <section class="bg-indigo-50 p-6 md:p-8 rounded-xl shadow-inner border-t-4 border-indigo-500">
-            <h2 class="text-3xl font-bold text-indigo-800 mb-4 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-3 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 14v6m-3-3h6M6 10h2m4 0h4m-7 6h6M3 12a9 9 0 1118 0 9 9 0 01-18 0z" />
-                </svg>
-                Featured Athlete: Connor Sullivan
-            </h2>
-
-            <div class="space-y-4 text-gray-700">
-                <p>
-                    <strong>Connor Sullivan</strong> is an accomplished student athlete who transitioned from a standout career at
-                    <span class="font-semibold text-indigo-900">Los Gatos High School (CA)</span> to playing collegiate water polo at
-                    <span class="font-semibold text-indigo-900">Pomona College</span>.
-                </p>
-                <div class="border-l-4 border-indigo-400 pl-4 bg-white p-3 rounded-lg shadow-sm">
-                    <p>
-                        During his high school career, Connor was a key player for the Los Gatos Varsity Water Polo team, earning distinctions such as
-                        **SCVAL League MVP** and **Academic All-American**. He was an influential force, helping lead his team to their first CIF-CCS Open Division tournament berth. He was noted for his strong outside shot and ambidextrous play as a driver/utility player.
-                    </p>
+            <!-- RIGHT COLUMN: Sidebar -->
+            <aside class="xl:col-span-1 space-y-8">
+                <!-- Socials -->
+                <div class="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white rounded-2xl shadow-2xl overflow-hidden p-1">
+                    <div class="bg-black/20 p-3 text-center backdrop-blur-sm rounded-t-xl">
+                        <h3 class="text-lg font-extrabold uppercase tracking-widest">Socials</h3>
+                    </div>
+                    <div class="p-4 bg-white/90 backdrop-blur-md space-y-3 rounded-b-xl">
+                        <a href="https://www.instagram.com/" target="_blank" class="block bg-gradient-to-r from-purple-500 to-pink-500 text-white p-2 rounded-lg text-center font-bold hover:opacity-90 transition transform hover:scale-105 shadow-md">Instagram</a>
+                        <a href="https://www.tiktok.com/" target="_blank" class="block bg-black text-white p-2 rounded-lg text-center font-bold hover:opacity-80 transition transform hover:scale-105 shadow-md">TikTok</a>
+                        <a href="https://www.snapchat.com/" target="_blank" class="block bg-yellow-400 text-black p-2 rounded-lg text-center font-bold hover:bg-yellow-300 transition transform hover:scale-105 shadow-md">Snapchat</a>
+                    </div>
                 </div>
-                <p>
-                    Now competing at the collegiate level with the <strong>Pomona-Pitzer Sagehens</strong>, Connor is listed as a Sophomore (for the 2025 season) and is a valuable addition to the Men's Water Polo roster. His dedication to both academics and athletics embodies the spirit of a Pomona College student athlete.
-                </p>
-
-                <!-- Athlete Details Table (Using basic HTML structure as taught in the PDFs) -->
-                <div class="overflow-x-auto pt-4">
-                    <table class="w-full text-left border-collapse rounded-lg overflow-hidden">
-                        <thead class="bg-indigo-600 text-white">
-                            <tr>
-                                <th class="p-3 border border-indigo-700">Category</th>
-                                <th class="p-3 border border-indigo-700">Detail</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="bg-white hover:bg-indigo-100">
-                                <td class="p-3 border border-indigo-200 font-medium">Hometown</td>
-                                <td class="p-3 border border-indigo-200">Los Gatos, CA</td>
-                            </tr>
-                            <tr class="bg-white hover:bg-indigo-100">
-                                <td class="p-3 border border-indigo-200 font-medium">High School</td>
-                                <td class="p-3 border border-indigo-200">Los Gatos High School</td>
-                            </tr>
-                            <tr class="bg-white hover:bg-indigo-100">
-                                <td class="p-3 border border-indigo-200 font-medium">College</td>
-                                <td class="p-3 border border-indigo-200">Pomona College</td>
-                            </tr>
-                            <tr class="bg-white hover:bg-indigo-100">
-                                <td class="p-3 border border-indigo-200 font-medium">Sport/Position</td>
-                                <td class="p-3 border border-indigo-200">Water Polo (Driver/Utility)</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <!-- AI Tools -->
+                <div class="bg-gradient-to-br from-gray-800 to-black text-white rounded-2xl shadow-2xl overflow-hidden">
+                    <div class="p-4 border-b border-gray-700 bg-gray-900">
+                        <h3 class="text-xl font-bold flex items-center"><span class="text-2xl mr-2">🤖</span> AI Intelligence</h3>
+                    </div>
+                    <div class="p-2">
+                        <a href="https://grok.com" target="_blank" class="sidebar-link block p-3 m-2 rounded-lg bg-gray-800 border border-gray-600 hover:border-blue-400">
+                            <div class="font-bold text-blue-300">Grok (xAI)</div>
+                        </a>
+                        <a href="https://chatgpt.com/" target="_blank" class="sidebar-link block p-3 m-2 rounded-lg bg-gray-800 border border-gray-600 hover:border-green-400">
+                            <div class="font-bold text-green-300">ChatGPT</div>
+                        </a>
+                        <a href="https://gemini.google.com/" target="_blank" class="sidebar-link block p-3 m-2 rounded-lg bg-gray-800 border border-gray-600 hover:border-purple-400">
+                            <div class="font-bold text-purple-300">Google Gemini</div>
+                        </a>
+                    </div>
+                </div>
+                <!-- News -->
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+                    <div class="p-4 bg-gradient-to-r from-red-700 to-red-600 text-white">
+                        <h3 class="text-xl font-bold flex items-center"><span class="text-2xl mr-2">📰</span> The Newsroom</h3>
+                    </div>
+                    <div class="p-2 space-y-1">
+                        <div class="m-2 p-3 bg-red-50 rounded-lg border-l-4 border-red-600">
+                            <div class="text-xs font-bold text-red-600 uppercase mb-1">Local Spotlight</div>
+                            <a href="https://www.nbcbayarea.com/" target="_blank" class="font-bold text-gray-900 hover:underline">NBC Bay Area</a>
+                        </div>
+                        <div class="border-t border-gray-200 my-2"></div>
+                        <a href="https://www.nbcnews.com/" target="_blank" class="sidebar-link block p-3 hover:bg-gray-100 rounded-lg"><span class="font-semibold text-gray-800">NBC News</span></a>
+                        <a href="https://www.foxnews.com/" target="_blank" class="sidebar-link block p-3 hover:bg-gray-100 rounded-lg"><span class="font-semibold text-gray-800">FOX News</span></a>
+                        <a href="https://www.bbc.com/news" target="_blank" class="sidebar-link block p-3 hover:bg-gray-100 rounded-lg"><span class="font-semibold text-gray-800">BBC News</span></a>
+                    </div>
+                </div>
+                <!-- Weather -->
+                <div class="bg-gradient-to-b from-blue-400 to-blue-600 text-white rounded-2xl shadow-xl overflow-hidden">
+                    <div class="p-4 text-center border-b border-blue-300">
+                        <h3 class="text-xl font-bold">🌤️ Weather Station</h3>
+                    </div>
+                    <div class="p-4 space-y-3">
+                        <a href="https://www.wunderground.com/weather/us/ca/los-gatos" target="_blank" class="block bg-white/20 p-3 rounded-xl hover:bg-white/30 transition flex justify-between items-center backdrop-blur-sm"><span class="font-bold">Los Gatos</span><span class="text-sm bg-white/20 px-2 py-1 rounded">View</span></a>
+                        <a href="https://www.wunderground.com/weather/us/ca/santa-cruz" target="_blank" class="block bg-white/20 p-3 rounded-xl hover:bg-white/30 transition flex justify-between items-center backdrop-blur-sm"><span class="font-bold">Santa Cruz</span><span class="text-sm bg-white/20 px-2 py-1 rounded">View</span></a>
+                        <a href="https://www.wunderground.com/weather/us/ca/claremont" target="_blank" class="block bg-white/20 p-3 rounded-xl hover:bg-white/30 transition flex justify-between items-center backdrop-blur-sm"><span class="font-bold">Claremont</span><span class="text-sm bg-white/20 px-2 py-1 rounded">View</span></a>
+                    </div>
+                </div>
+                <!-- Clicker -->
+                <div class="bg-white rounded-2xl shadow-md p-4 text-center border border-gray-200">
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Clicker Zone</p>
+                    <div class="flex flex-col items-center gap-2">
+                         <div class="flex items-center justify-center gap-4 bg-gray-50 rounded-xl p-2 w-full">
+                            <button onclick="incrementCounter()" class="click-anim bg-indigo-600 hover:bg-indigo-700 text-white rounded-full p-3 shadow-lg transition"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg></button>
+                            <span id="click-count" class="text-3xl font-mono font-black text-indigo-900">0</span>
+                        </div>
+                        <button onclick="resetCounter()" class="text-xs text-red-500 hover:underline">Reset</button>
+                    </div>
                 </div>
 
-                <p class="text-sm text-gray-500 pt-2 italic">
-                    <cite>Source:</cite> Information compiled from public athletic profiles.
-                </p>
-            </div>
-        </section>
+                <!-- PARTY BUTTON -->
+                <div class="mt-4 text-center">
+                    <button onclick="triggerParty()" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black py-4 rounded-2xl shadow-xl hover:scale-105 transition transform animate-pulse">
+                        🎉 PARTY BUTTON 🎉
+                    </button>
+                </div>
 
+                <!-- DAD JOKE GENERATOR -->
+                <div class="mt-4 bg-blue-100 p-4 rounded-2xl shadow-lg text-center border-2 border-blue-300">
+                    <h3 class="font-bold text-blue-700 mb-2">👨 Dad Joke Generator</h3>
+                    <div id="dad-joke-display" class="bg-white p-3 rounded-lg text-sm text-gray-700 min-h-[60px] flex items-center justify-center mb-2 italic">
+                        Click below for a groan!
+                    </div>
+                    <button onclick="generateDadJoke()" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-xl transition">
+                        Tell Me A Joke
+                    </button>
+                </div>
+
+                <!-- ROAST GENERATOR -->
+                <div class="mt-4 bg-red-100 p-4 rounded-2xl shadow-lg text-center border-2 border-red-300">
+                    <h3 class="font-bold text-red-700 mb-2">🔥 DO NOT PRESS 🔥</h3>
+                    <div id="roast-display" class="bg-white p-3 rounded-lg text-sm text-gray-700 min-h-[60px] flex items-center justify-center mb-2 italic">
+                        Warning: Savage content ahead.
+                    </div>
+                    <button onclick="generateRoast()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl transition animate-bounce">
+                        ROAST ME
+                    </button>
+                </div>
+
+            </aside>
+        </div>
+
+        <footer class="text-center mt-16 text-gray-400 text-sm pb-8">
+            &copy; 2025 Custom Web Page. Built using HTML and CSS principles.
+        </footer>
     </div>
 
-    <!-- Footer for a clean finish -->
-    <footer class="text-center mt-8 text-gray-400 text-sm">
-        <hr class="mb-4 border-gray-200">
-        &copy; 2025 Custom Web Page. Built using HTML and CSS principles.
-    </footer>
+    <!-- MAIN GAME SCRIPT -->
+    <script>
+        // --- CLICKER LOGIC ---
+        let count = 0;
+        function incrementCounter() {
+            count++;
+            document.getElementById('click-count').innerText = count;
+        }
+        function resetCounter() {
+            count = 0;
+            document.getElementById('click-count').innerText = count;
+        }
 
+        // --- PARTY LOGIC ---
+        function triggerParty() {
+            const emojis = ['🎉', '🥳', '🎈', '✨', '🔥', '🏀', '🏈', '⚾'];
+            for (let i = 0; i < 60; i++) {
+                const el = document.createElement('div');
+                el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                el.style.position = 'fixed';
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.top = '-50px';
+                el.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                el.style.zIndex = '9999';
+                el.style.pointerEvents = 'none';
+                el.style.transition = 'top 3s ease-in, opacity 3s ease-out, transform 3s linear';
+                document.body.appendChild(el);
+
+                // Animate
+                setTimeout(() => {
+                    el.style.top = (window.innerHeight + 100) + 'px';
+                    el.style.opacity = '0';
+                    el.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+                }, 50);
+
+                setTimeout(() => el.remove(), 3000);
+            }
+        }
+
+        // --- DAD JOKE LOGIC ---
+        const dadJokes = [
+            "I'm afraid for the calendar. Its days are numbered.",
+            "My wife said I should do lunges to stay in shape. That would be a big step forward.",
+            "Why do fathers take an extra pair of socks when they go golfing? In case they get a hole in one!",
+            "Singing in the shower is fun until you get soap in your mouth. Then it's a soap opera.",
+            "What do a tick and the Eiffel Tower have in common? They're both Paris sites.",
+            "What do you call a fish wearing a bowtie? Sofishticated.",
+            "How do you follow Will Smith in the snow? You follow the fresh prints.",
+            "If April showers bring May flowers, what do May flowers bring? Pilgrims.",
+            "I thought the dryer was shrinking my clothes. Turns out it was the refrigerator all along.",
+            "How does a penguin build its house? Igloos it together.",
+            "What do you call a factory that makes okay products? A satisfactory.",
+            "Why did the scarecrow win an award? Because he was outstanding in his field.",
+            "Why don't skeletons fight each other? They don't have the guts.",
+            "What do you call fake spaghetti? An impasta.",
+            "What do you call a belt made out of watches? A waist of time.",
+            "I only know 25 letters of the alphabet. I don't know y.",
+            "How does a taco say grace? Lettuce pray.",
+            "What time did the man go to the dentist? Tooth hurt-y.",
+            "Why did the math book look sad? Because it had too many problems.",
+            "What do you call cheese that isn't yours? Nacho cheese."
+        ];
+
+        function generateDadJoke() {
+            const joke = dadJokes[Math.floor(Math.random() * dadJokes.length)];
+            document.getElementById('dad-joke-display').innerText = joke;
+        }
+
+        // --- ROAST LOGIC ---
+        const roasts = [
+            "You're like a cloud. When you disappear, it's a beautiful day.",
+            "I'd agree with you but then we'd both be wrong.",
+            "You have something on your chin... no, the 3rd one down.",
+            "I’m not saying you’re ugly, but you look like a 'before' picture.",
+            "You bring everyone so much joy… when you leave the room.",
+            "If I had a face like yours, I'd sue my parents.",
+            "You are the human equivalent of a participation trophy.",
+            "I’ve seen salads that dress better than you.",
+            "You're proof that even God makes mistakes sometimes.",
+            "Your secrets are safe with me. I never even listen when you tell me them."
+        ];
+
+        function generateRoast() {
+            const roast = roasts[Math.floor(Math.random() * roasts.length)];
+            document.getElementById('roast-display').innerText = roast;
+        }
+
+        // --- GAME 1: SNAKE (Corrected Logic) ---
+        (function() {
+            const canvas = document.getElementById('snakeCanvas');
+            const ctx = canvas.getContext('2d');
+            const box = 20; // grid size
+            const wrapper = document.getElementById('snake-game');
+            let gameInterval;
+            let snake, food, d, score, isPlaying = false;
+
+            function init() {
+                snake = [];
+                snake[0] = { x: 7 * box, y: 7 * box };
+                food = {
+                    x: Math.floor(Math.random() * (canvas.width/box)) * box,
+                    y: Math.floor(Math.random() * (canvas.height/box)) * box
+                };
+                d = null; // No movement initially
+                score = 0;
+                isPlaying = false;
+                draw(); // Draw initial state
+                // Draw start text
+                ctx.fillStyle = "white";
+                ctx.font = "20px Courier New";
+                ctx.fillText("Press 'F' to Start", 40, 140);
+            }
+
+            // Controls
+            wrapper.addEventListener('keydown', (event) => {
+                let key = event.key.toLowerCase();
+                if (key === 'f') {
+                    if (gameInterval) clearInterval(gameInterval);
+                    snake = [{ x: 7 * box, y: 7 * box }];
+                    d = "RIGHT";
+                    score = 0;
+                    isPlaying = true;
+                    gameInterval = setInterval(draw, 100);
+                }
+                if (isPlaying) {
+                    if (event.keyCode == 37 && d != "RIGHT") d = "LEFT";
+                    else if (event.keyCode == 38 && d != "DOWN") d = "UP";
+                    else if (event.keyCode == 39 && d != "LEFT") d = "RIGHT";
+                    else if (event.keyCode == 40 && d != "UP") d = "DOWN";
+
+                    if([37,38,39,40].includes(event.keyCode)) event.preventDefault();
+                }
+            });
+
+            function collision(head, array) {
+                for (let i = 0; i < array.length; i++) {
+                    if (head.x == array[i].x && head.y == array[i].y) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            function draw() {
+                ctx.fillStyle = "black";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                for (let i = 0; i < snake.length; i++) {
+                    ctx.fillStyle = (i == 0) ? "#00ff00" : "#00cc00"; // Green
+                    ctx.fillRect(snake[i].x, snake[i].y, box, box);
+                    ctx.strokeStyle = "black";
+                    ctx.strokeRect(snake[i].x, snake[i].y, box, box);
+                }
+
+                ctx.fillStyle = "red";
+                ctx.fillRect(food.x, food.y, box, box);
+
+                if(!isPlaying) return;
+
+                let snakeX = snake[0].x;
+                let snakeY = snake[0].y;
+
+                if (d == "LEFT") snakeX -= box;
+                if (d == "UP") snakeY -= box;
+                if (d == "RIGHT") snakeX += box;
+                if (d == "DOWN") snakeY += box;
+
+                // Eat food
+                if (snakeX == food.x && snakeY == food.y) {
+                    score++;
+                    food = {
+                        x: Math.floor(Math.random() * (canvas.width/box)) * box,
+                        y: Math.floor(Math.random() * (canvas.height/box)) * box
+                    };
+                } else {
+                    snake.pop(); // Remove tail
+                }
+
+                let newHead = { x: snakeX, y: snakeY };
+
+                // Game Over Rules
+                if (snakeX < 0 || snakeX >= canvas.width || snakeY < 0 || snakeY >= canvas.height || collision(newHead, snake)) {
+                    clearInterval(gameInterval);
+                    isPlaying = false;
+                    ctx.fillStyle = "red";
+                    ctx.font = "30px Courier New";
+                    ctx.fillText("Game Over", 60, 140);
+                    ctx.fillStyle = "white";
+                    ctx.font = "16px Courier New";
+                    ctx.fillText("Press 'F' to Restart", 50, 170);
+                }
+
+                snake.unshift(newHead);
+            }
+
+            init();
+        })();
+
+        // --- GAME 2: DINO RUNNER (Corrected Logic) ---
+        (function() {
+            const canvas = document.getElementById('dinoCanvas');
+            const ctx = canvas.getContext('2d');
+            const wrapper = document.getElementById('dino-game');
+
+            let dino, obstacles, score, gameInterval, isPlaying = false, frame = 0;
+            const gravity = 1.5;
+
+            function init() {
+                dino = { x: 30, y: 220, w: 30, h: 30, dy: 0, jumpStrength: 18, grounded: true };
+                obstacles = [];
+                score = 0;
+                frame = 0;
+                isPlaying = false;
+                ctx.clearRect(0,0,canvas.width, canvas.height);
+                drawStatic();
+                ctx.fillStyle = "#333";
+                ctx.font = "20px Courier New";
+                ctx.fillText("Press 'F' to Start", 40, 140);
+            }
+
+            wrapper.addEventListener('keydown', (e) => {
+                let key = e.key.toLowerCase();
+                if (key === 'f') {
+                    if (gameInterval) clearInterval(gameInterval);
+                    isPlaying = true;
+                    dino = { x: 30, y: 220, w: 30, h: 30, dy: 0, jumpStrength: 18, grounded: true };
+                    obstacles = [];
+                    score = 0;
+                    frame = 0;
+                    gameInterval = setInterval(update, 20);
+                }
+                if (isPlaying && (e.code === 'Space' || e.code === 'ArrowUp')) {
+                    if (dino.grounded) {
+                        dino.dy = -dino.jumpStrength;
+                        dino.grounded = false;
+                    }
+                    e.preventDefault();
+                }
+            });
+
+            function drawStatic() {
+                 // Ground
+                ctx.beginPath();
+                ctx.moveTo(0, 250);
+                ctx.lineTo(canvas.width, 250);
+                ctx.strokeStyle = "#555";
+                ctx.stroke();
+            }
+
+            function update() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawStatic();
+
+                // Dino Physics
+                if (!dino.grounded) {
+                    dino.dy += gravity; // Gravity
+                    dino.y += dino.dy;
+                }
+                if (dino.y >= 220) {
+                    dino.y = 220;
+                    dino.dy = 0;
+                    dino.grounded = true;
+                }
+
+                // Draw Dino
+                ctx.fillStyle = "#444";
+                ctx.fillRect(dino.x, dino.y, dino.w, dino.h);
+
+                // Obstacles
+                frame++;
+                if (frame % 100 === 0) {
+                    let h = Math.floor(Math.random() * (50 - 20 + 1) + 20);
+                    obstacles.push({ x: canvas.width, y: 250 - h, w: 20, h: h });
+                }
+
+                for (let i = 0; i < obstacles.length; i++) {
+                    let o = obstacles[i];
+                    o.x -= 4; // Speed
+                    ctx.fillStyle = "#d00";
+                    ctx.fillRect(o.x, o.y, o.w, o.h);
+
+                    // Collision
+                    if (dino.x < o.x + o.w &&
+                        dino.x + dino.w > o.x &&
+                        dino.y < o.y + o.h &&
+                        dino.y + dino.h > o.y) {
+
+                        clearInterval(gameInterval);
+                        isPlaying = false;
+                        ctx.fillStyle = "red";
+                        ctx.font = "30px Courier New";
+                        ctx.fillText("Game Over", 60, 100);
+                        ctx.font = "16px Courier New";
+                        ctx.fillText("Press 'F' to Restart", 50, 130);
+                    }
+                }
+                score++;
+                ctx.fillStyle = "#000";
+                ctx.font = "16px monospace";
+                ctx.fillText("Score: " + Math.floor(score/5), 200, 30);
+            }
+            init();
+        })();
+
+        // --- GAME 3: BREAKOUT (Final Fixes for Score & Respawn) ---
+        (function() {
+            const canvas = document.getElementById("breakoutCanvas");
+            const ctx = canvas.getContext("2d");
+            const wrapper = document.getElementById('breakout-game');
+
+            let ball, paddle, bricks, score, lives, isPlaying = false, gameReq;
+            let bricksRowCount = 4;
+            let bricksColCount = 5;
+
+            function initGameVars() {
+                ball = { x: canvas.width/2, y: canvas.height-30, dx: 2, dy: -2, radius: 5, color: "#fff" };
+                paddle = { h: 10, w: 60, x: (canvas.width-60)/2, color: "#00ffff" };
+                score = 0;
+                lives = 3;
+                initBricks();
+            }
+
+            function initBricks() {
+                bricks = [];
+                for(let c=0; c<bricksColCount; c++) {
+                    bricks[c] = [];
+                    for(let r=0; r<bricksRowCount; r++) {
+                        bricks[c][r] = { x: 0, y: 0, status: 1 };
+                    }
+                }
+            }
+
+            function draw() {
+                ctx.fillStyle = "black";
+                ctx.fillRect(0,0,canvas.width, canvas.height);
+
+                if(!isPlaying) {
+                    ctx.fillStyle = "#00ffff";
+                    ctx.font = "20px Courier New";
+                    ctx.fillText("Press 'F' to Start", 40, 150);
+                    return;
+                }
+
+                // Draw Bricks
+                let activeBricks = 0;
+                for(let c=0; c<bricksColCount; c++) {
+                    for(let r=0; r<bricksRowCount; r++) {
+                        if(bricks[c][r].status == 1) {
+                            activeBricks++;
+                            let brickX = (c*(45+5))+15;
+                            let brickY = (r*(15+5))+30;
+                            bricks[c][r].x = brickX;
+                            bricks[c][r].y = brickY;
+                            ctx.fillStyle = "#ff00ff";
+                            ctx.fillRect(brickX, brickY, 45, 15);
+                        }
+                    }
+                }
+
+                // Check for Level Clear (Respawn bricks)
+                if (activeBricks === 0) {
+                    initBricks();
+                    ball.x = canvas.width/2;
+                    ball.y = canvas.height-30;
+                    ball.dy = -Math.abs(ball.dy * 1.1); // Slightly faster
+                    ball.dx = ball.dx;
+                    paddle.x = (canvas.width-paddle.w)/2;
+                    // Optional: Brief pause or flash could go here
+                }
+
+                // Draw Ball
+                ctx.beginPath();
+                ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2);
+                ctx.fillStyle = ball.color;
+                ctx.fill();
+                ctx.closePath();
+
+                // Draw Paddle
+                ctx.fillStyle = paddle.color;
+                ctx.fillRect(paddle.x, canvas.height-paddle.h-5, paddle.w, paddle.h);
+
+                // Draw Score & Lives
+                ctx.font = "14px Courier New";
+                ctx.fillStyle = "#fff";
+                ctx.fillText("Score: " + score, 8, 20);
+                ctx.fillText("Lives: " + lives, canvas.width - 80, 20);
+
+                // Logic
+                ball.x += ball.dx;
+                ball.y += ball.dy;
+
+                // Walls
+                if(ball.x + ball.dx > canvas.width-ball.radius || ball.x + ball.dx < ball.radius) ball.dx = -ball.dx;
+                if(ball.y + ball.dy < ball.radius) ball.dy = -ball.dy;
+                else if(ball.y + ball.dy > canvas.height-ball.radius-paddle.h-5) {
+                    if(ball.x > paddle.x && ball.x < paddle.x + paddle.w) {
+                        ball.dy = -ball.dy * 1.05;
+                    } else {
+                         // Die
+                        lives--;
+                        if(!lives) {
+                            isPlaying = false;
+                            cancelAnimationFrame(gameReq);
+                            ctx.fillStyle = "red";
+                            ctx.font = "30px Courier New";
+                            ctx.fillText("GAME OVER", 60, 150);
+                            ctx.font = "14px Courier New";
+                            ctx.fillStyle = "#fff";
+                            ctx.fillText("Final Score: " + score, 75, 175);
+                            ctx.fillText("Press 'F' to Restart", 60, 200);
+                        } else {
+                            ball.x = canvas.width/2;
+                            ball.y = canvas.height-30;
+                            ball.dy = -2;
+                            paddle.x = (canvas.width-paddle.w)/2;
+                        }
+                    }
+                }
+
+                // Brick Collision
+                for(let c=0; c<bricksColCount; c++) {
+                    for(let r=0; r<bricksRowCount; r++) {
+                        let b = bricks[c][r];
+                        if(b.status == 1) {
+                            if(ball.x > b.x && ball.x < b.x+45 && ball.y > b.y && ball.y < b.y+15) {
+                                ball.dy = -ball.dy;
+                                b.status = 0;
+                                score++;
+                            }
+                        }
+                    }
+                }
+
+                if(isPlaying) gameReq = requestAnimationFrame(draw);
+            }
+
+            // Input
+            wrapper.addEventListener('keydown', (e) => {
+                let key = e.key.toLowerCase();
+                if(key === 'f') {
+                    if(!isPlaying) {
+                        initGameVars();
+                        isPlaying = true;
+                        draw();
+                    }
+                }
+                if(isPlaying) {
+                    if(e.code == "ArrowRight" && paddle.x < canvas.width-paddle.w) paddle.x += 20;
+                    else if(e.code == "ArrowLeft" && paddle.x > 0) paddle.x -= 20;
+                    e.preventDefault();
+                }
+            });
+
+            // Mouse
+            wrapper.addEventListener('mousemove', (e) => {
+                if(!isPlaying) return;
+                const rect = canvas.getBoundingClientRect();
+                const relativeX = e.clientX - rect.left;
+                if(relativeX > 0 && relativeX < canvas.width) {
+                    paddle.x = relativeX - paddle.w/2;
+                }
+            });
+
+            initGameVars();
+            draw(); // Initial render
+        })();
+    </script>
 </body>
-</html>
-
-
